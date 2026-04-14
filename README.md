@@ -6,18 +6,17 @@ The Study Companion Desktop Widget is a Python-based application designed to imp
 ## Features
 - Pomodoro timer with customizable work and break intervals
 - Visual countdown display
-- Mini-games available during breaks (Tic-Tac-Toe, Snake, Rock-Paper-Scissors)
+- Mini-games available during breaks (Tic-Tac-Toe, Flappy Bird, Rock-Paper-Scissors)
 - Simple graphical user interface (GUI)
 
 ## Project Structure
 study-widget/
-│
-├── main.py # Entry point of the program
-├── gui.py # Handles the graphical user interface
-├── timer.py # Contains Pomodoro timer logic
-├── games/ # Contains mini-game implementations
-├── tests/ # Unit tests for core functionality
-└── README.md # Project documentation
+main.py # Entry point of the program
+gui.py # Handles the graphical user interface
+timer.py # Contains Pomodoro timer logic
+games/ # Contains mini-game implementations
+unittests.py/ # Unit tests for core functionality
+README.md # Project documentation
 
 ## How to Run
 1. Make sure Python is installed

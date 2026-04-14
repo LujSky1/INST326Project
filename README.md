@@ -10,11 +10,11 @@ The Study Companion Desktop Widget is a Python-based application designed to imp
 - Simple graphical user interface (GUI)
 
 ## Project Structure
-study-widget/
+study-widget
 main.py # Entry point of the program
 gui.py # Handles the graphical user interface
 timer.py # Contains Pomodoro timer logic
-games/ # Contains mini-game implementations
+games.py # Contains mini-game implementations
 unittests.py/ # Unit tests for core functionality
 README.md # Project documentation
 

@@ -1,35 +1,72 @@
 import unittest
-from timer import Timer
+from games import RockPaperScissors, TicTacToe, Flappy Bird
 
-class TestTimer(unittest.TestCase):
+
+class TestRockPaperScissors(unittest.TestCase):
     """
-    Unit tests for the Timer class.
+    Unit tests for RockPaperScissors class.
     """
 
-    def test_initialization(self):
+    def setUp(self):
         """
-        Tests that the timer initializes with correct values.
+        Creates a new game instance before each test.
         """
-        timer = Timer(25, 5)
-        self.assertEqual(timer.work_time, 25)
-        self.assertEqual(timer.break_time, 5)
+        self.game = RockPaperScissors()
 
-    def test_switch_mode(self):
+    def test_tie(self):
         """
-        Tests switching between work and break modes.
+        Tests that identical choices result in a tie.
         """
-        timer = Timer(25, 5)
-        timer.switch_mode()
-        self.assertTrue(timer.is_break)
-        self.assertEqual(timer.current_time, 5)
+        self.assertEqual(self.game.get_result("rock", "rock"), "tie")
 
-    def test_tick(self):
+    def test_player_win_cases(self):
         """
-        Tests that the timer decreases correctly.
+        Tests all winning scenarios for the player.
         """
-        timer = Timer(25, 5)
-        timer.tick()
-        self.assertEqual(timer.current_time, 24)
+        self.assertEqual(self.game.get_result("rock", "scissors"), "win")
+        self.assertEqual(self.game.get_result("paper", "rock"), "win")
+        self.assertEqual(self.game.get_result("scissors", "paper"), "win")
+
+    def test_player_lose_cases(self):
+        """
+        Tests all losing scenarios for the player.
+        """
+        self.assertEqual(self.game.get_result("rock", "paper"), "lose")
+        self.assertEqual(self.game.get_result("paper", "scissors"), "lose")
+        self.assertEqual(self.game.get_result("scissors", "rock"), "lose")
+
+
+class TestTicTacToe(unittest.TestCase):
+    """
+    Unit tests for TicTacToe class.
+    """
+
+    def setUp(self):
+        self.game = TicTacToe()
+
+    def test_board_initialization(self):
+        """
+        Board should start empty.
+        """
+        self.assertEqual(len(self.game.board), 9)
+        self.assertTrue(all(cell == " " for cell in self.game.board))
+
+    def test_make_move(self):
+        """
+        Test that a move updates the board.
+        """
+        self.game.make_move(0)
+        self.assertNotEqual(self.game.board[0], " ")
+
+    def test_switch_player(self):
+        """
+        Test that player switches correctly.
+        """
+        first = self.game.current_player
+        self.game.switch_player()
+        self.assertNotEqual(first, self.game.current_player)
+
 
 if __name__ == "__main__":
+    unittest.main()
     unittest.main()

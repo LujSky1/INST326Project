@@ -1,5 +1,5 @@
 import unittest
-from games import RockPaperScissors, TicTacToe, Flappy Bird
+from games import RockPaperScissors, TicTacToe, FlappyBird
 
 
 class TestRockPaperScissors(unittest.TestCase):
@@ -65,6 +65,48 @@ class TestTicTacToe(unittest.TestCase):
         first = self.game.current_player
         self.game.switch_player()
         self.assertNotEqual(first, self.game.current_player)
+
+class TestFlappyBird(unittest.TestCase):
+    """
+    Unit tests for FlappyBird class.
+    """
+
+    def setUp(self):
+        """
+        Creates a new FlappyBird instance before each test.
+        """
+        self.game = FlappyBird()
+
+    def test_initial_state(self):
+        """
+        Tests initial values of the game.
+        """
+        self.assertEqual(self.game.score, 0)
+        self.assertTrue(self.game.is_alive)
+        self.assertEqual(self.game.position, 0)
+
+    def test_flap(self):
+        """
+        Tests that flap increases position.
+        """
+        self.game.flap()
+        self.assertEqual(self.game.position, 2)
+
+    def test_gravity(self):
+        """
+        Tests that gravity decreases position.
+        """
+        self.game.position = 5
+        self.game.gravity()
+        self.assertEqual(self.game.position, 4)
+
+    def test_game_over(self):
+        """
+        Tests that the game ends when position goes below zero.
+        """
+        self.game.position = 0
+        self.game.gravity()
+        self.assertFalse(self.game.is_alive)
 
 
 if __name__ == "__main__":

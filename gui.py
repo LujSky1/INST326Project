@@ -1,4 +1,5 @@
 import tkinter as tk
+from timer import Timer
 
 class StudyWidget:
     """
@@ -14,6 +15,8 @@ class StudyWidget:
         """
         self.root = tk.Tk()
         self.root.title("Study Widget")
+        
+        self.timer = Timer(25, 5)
         
         self.root.geometry("300x250")
         
@@ -67,12 +70,10 @@ class StudyWidget:
 
     def start_timer(self):
         """
-        Starts the timer.
-
-        This is a placeholder method that will later connect
-        to the Pomodoro timer logic.
+        Starts the timer and begins updating the display.
         """
-        print("Timer started!")
+        self.timer.start()
+        self.update_timer()
         
     def launch_tictactoe(self):
         """
@@ -80,6 +81,15 @@ class StudyWidget:
         """
         game = TicTacToe()
         game.start()
+    def update_timer(self):
+        """
+        Updates the timer display every second.
+        """
+        self.timer.tick()
+        self.timer_label.config(text=self.timer.get_time())
+
+        if self.timer.is_running:
+        self.root.after(1000, self.update_timer)
 
     def launch_rps(self):
         """

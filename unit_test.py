@@ -1,5 +1,6 @@
 import unittest
 from games import RockPaperScissors, TicTacToe, FlappyBird
+from timer import Timer
 
 
 class TestRockPaperScissors(unittest.TestCase):
@@ -111,4 +112,37 @@ class TestFlappyBird(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+    unittest.main()
+
+class TestTimer(unittest.TestCase):
+
+    def setUp(self):
+        self.timer = Timer(1, 1)  # small values for testing
+
+    def test_initial_state(self):
+        self.assertFalse(self.timer.is_break)
+        self.assertFalse(self.timer.is_running)
+
+    def test_start(self):
+        self.timer.start()
+        self.assertTrue(self.timer.is_running)
+
+    def test_tick(self):
+        self.timer.start()
+        initial = self.timer.current_time
+        self.timer.tick()
+        self.assertEqual(self.timer.current_time, initial - 1)
+
+    def test_switch_mode(self):
+        self.timer.current_time = 0
+        self.timer.start()
+        self.timer.tick()
+        self.assertTrue(self.timer.is_break)
+
+    def test_format_time(self):
+        self.timer.current_time = 65
+        self.assertEqual(self.timer.get_time(), "01:05")
+
+
+if __name__ == "__main__":
     unittest.main()

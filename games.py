@@ -54,36 +54,66 @@ class TicTacToe(Game):
         Switches turns between player X and O.
         """
 
+import random
+
 class RockPaperScissors(Game):
     """
     Implements Rock Paper Scissors game.
 
-    The player chooses an option and the computer randomly selects one.
-    The winner is determined based on standard rules.
+    The player selects an option and the computer randomly selects one.
+    The result is calculated based on standard game rules.
     """
 
     def __init__(self):
         """
-        Initializes available choices.
+        Initializes the game with available choices.
         """
+        self.choices = ["rock", "paper", "scissors"]
 
     def start(self):
         """
-        Starts the Rock Paper Scissors game.
+        Starts the game in command-line mode (for testing).
         """
         print("Starting Rock Paper Scissors...")
+        player_choice = input("Enter rock, paper, or scissors: ").lower()
+        computer_choice = self.get_computer_choice()
+
+        result = self.get_result(player_choice, computer_choice)
+
+        print(f"Computer chose: {computer_choice}")
+        print(f"Result: {result}")
+
+    def get_computer_choice(self):
+        """
+        Randomly selects a choice for the computer.
+
+        Returns:
+            str: computer's choice
+        """
+        return random.choice(self.choices)
 
     def get_result(self, player_choice, computer_choice):
         """
         Determines the result of the game.
 
         Args:
-            player_choice (str): Player's selection
-            computer_choice (str): Computer's selection
+            player_choice (str): Player's choice
+            computer_choice (str): Computer's choice
 
         Returns:
-            str: result of the game (win/lose/tie)
+            str: "win", "lose", or "tie"
         """
+        if player_choice == computer_choice:
+            return "tie"
+
+        if (
+            (player_choice == "rock" and computer_choice == "scissors") or
+            (player_choice == "paper" and computer_choice == "rock") or
+            (player_choice == "scissors" and computer_choice == "paper")
+        ):
+            return "win"
+
+        return "lose"
 
 class FlappyBird(Game):
     """

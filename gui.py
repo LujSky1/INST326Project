@@ -89,7 +89,7 @@ class StudyWidget:
         self.timer_label.config(text=self.timer.get_time())
 
         if self.timer.is_running:
-        self.root.after(1000, self.update_timer)
+            self.root.after(1000, self.update_timer)
 
     def launch_rps(self):
         """

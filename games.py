@@ -1,3 +1,4 @@
+#Editing tic-tac-toe game - YPL
 """
 This module contains all mini-games used in the Study Companion Desktop Widget.
 

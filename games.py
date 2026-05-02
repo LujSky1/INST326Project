@@ -5,14 +5,11 @@ class Game:
         raise NotImplementedError
 
 
-# Tic Tac Toe (TEMP SIMPLE VERSION)
-
 class TicTacToe(Game):
     def start(self):
-        print("Tic Tac Toe launched (GUI coming soon)")
+        print("Tic Tac Toe launched (not fully implemented yet)")
 
 
-# Rock Paper Scissors
 class RockPaperScissors(Game):
 
     def __init__(self):
@@ -42,7 +39,6 @@ class RockPaperScissors(Game):
         return "lose"
 
 
-# Flappy Bird (TEMP)
 class FlappyBird(Game):
     def start(self):
         print("Flappy Bird launched (not implemented yet)")

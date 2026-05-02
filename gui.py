@@ -1,6 +1,6 @@
 import tkinter as tk
 from timer import Timer
-
+from games import TicTacToe, RockPaperScissors, FlappyBird
 class StudyWidget:
     """
     Represents the main graphical user interface for the Study Companion Widget.

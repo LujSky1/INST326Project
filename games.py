@@ -22,6 +22,8 @@ class Game:
         """
         raise NotImplementedError("Each game must implement a start method.")
 ###### Additional code pending edits
+"""Determines the dimensions and initial set up of the game board.  Also, sets the players as human and computer (random)
+"""
 class TicTacToe:
     def __init__(self):
         self.window = tk.Tk()
@@ -44,6 +46,9 @@ class TicTacToe:
             if not self.check_game_over():
                 self.window.after(500, self.computer_move) # Delay computer move slightly
 
+"""Sets players moves on game board and determines if move is valid
+"""
+
 
     def computer_move(self):
         empty_slots = [i for i, spot in enumerate(self.board) if spot == " "]
@@ -56,6 +61,8 @@ class TicTacToe:
         self.board[index] = player
         self.buttons[index].config(text=player, state="disabled", disabledforeground="black")
         self.current_player = "O" if player == "X" else "X"
+
+"""Determines the result of the game based on determined winner or tie"""
 
 def check_game_over(self):
         win_conditions = [(0,1,2), (3,4,5), (6,7,8), (0,3,6), (1,4,7), (2,5,8), (0,4,8), (2,4,6)]

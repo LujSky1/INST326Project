@@ -8,6 +8,5 @@ This file initializes and runs the graphical user interface.
 from gui import StudyWidget
 
 if __name__ == "__main__":
-    """
-    Starts the application.
-    """
+    app = StudyWidget()
+    app.run()

@@ -13,9 +13,10 @@ class Timer:
             10: 3
         }
 
-        self.current_time = 0
-        self.work_time = 0
-        self.break_time = 0
+        self.work_time = 25 * 60  # default to 25 min
+        self.break_time = 5 * 60
+
+        self.current_time = self.work_time
 
         self.is_break = False
         self.is_running = False
@@ -27,6 +28,9 @@ class Timer:
         Args:
             minutes (int): Selected work duration (10, 15, or 25)
         """
+        if minutes not in self.work_durations:
+            raise ValueError("Invalid work duration selected.")
+
         self.work_time = minutes * 60
         self.break_time = self.work_durations[minutes] * 60
         self.current_time = self.work_time
@@ -55,18 +59,23 @@ class Timer:
     def tick(self):
         """
         Updates the timer by one second.
+
+        Returns:
+            int: Current time remaining in seconds.
         """
         if self.is_running:
             if self.current_time > 0:
                 self.current_time -= 1
             else:
                 self.switch_mode()
+        return self.current_time
 
     def switch_mode(self):
         """
         Switches between work and break sessions.
         """
         self.is_break = not self.is_break
+
         if self.is_break:
             self.current_time = self.break_time
         else:
@@ -75,6 +84,9 @@ class Timer:
     def get_time(self):
         """
         Returns formatted time string.
+
+        Returns:
+            str: Time in MM:SS format.
         """
         minutes = self.current_time // 60
         seconds = self.current_time % 60
@@ -83,5 +95,8 @@ class Timer:
     def get_mode(self):
         """
         Returns current mode as string.
+
+        Returns:
+            str: "Work" or "Break"
         """
         return "Break" if self.is_break else "Work"

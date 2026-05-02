@@ -1,26 +1,30 @@
 class Timer:
-    """
-    Represents a Pomodoro timer used to manage study and break sessions.
-    """
-
     def __init__(self, work_time, break_time):
-        """
-        Initializes the timer with work and break durations.
+        self.work_time = work_time * 60
+        self.break_time = break_time * 60
+        self.current_time = self.work_time
+        self.is_break = False
+        self.is_running = False
 
-        Args:
-            work_time (int): Duration of the work session in minutes.
-            break_time (int): Duration of the break session in minutes.
-        """
+    def start(self):
+        self.is_running = True
 
     def switch_mode(self):
-        """
-        Switches between work mode and break mode.
-        """
+        self.is_break = not self.is_break
+        if self.is_break:
+            self.current_time = self.break_time
+        else:
+            self.current_time = self.work_time
 
     def tick(self):
-        """
-        Decreases the timer by one unit.
+        if self.is_running:
+            if self.current_time > 0:
+                self.current_time -= 1
+            else:
+                self.switch_mode()
+        return self.current_time
 
-        Returns:
-            int: The updated current time.
-        """
+    def get_time(self):
+        minutes = self.current_time // 60
+        seconds = self.current_time % 60
+        return f"{minutes:02}:{seconds:02}"

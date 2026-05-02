@@ -22,6 +22,15 @@ class StudyWidget:
         self.root.geometry("300x250")
         
         self.root.attributes("-topmost", True)
+
+        self.selected_time = tk.IntVar(value=25)
+
+        self.dropdown = tk.OptionMenu(
+            self.root,
+            self.selected_time,
+                25, 15, 10
+                )
+        self.dropdown.pack(pady=5)
         
         # Timer Display
         self.timer_label = tk.Label(
@@ -73,6 +82,8 @@ class StudyWidget:
         """
         Starts the timer and begins updating the display.
         """
+        selected = self.selected_time.get()
+        self.timer.set_work_time(selected)
         self.timer.start()
         self.update_timer()
         

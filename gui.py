@@ -78,6 +78,13 @@ class StudyWidget:
         )
         self.flappy_button.pack(pady=2)
 
+        self.stop_button = tk.Button(
+            self.root,
+            text="Stop Timer",
+            command=self.stop_timer
+            )
+        self.stop_button.pack(pady=5)
+
     def start_timer(self):
         """
         Starts the timer and begins updating the display.
@@ -93,6 +100,7 @@ class StudyWidget:
         """
         game = TicTacToe()
         game.start()
+        
     def update_timer(self):
         """
         Updates the timer display every second.

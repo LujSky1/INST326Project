@@ -100,7 +100,7 @@ class StudyWidget:
         """
         game = TicTacToe()
         game.start()
-        
+
     def update_timer(self):
         """
         Updates the timer display every second.
@@ -130,3 +130,8 @@ class StudyWidget:
         Runs the main event loop for the GUI.
         """
         self.root.mainloop()
+
+    def stop_timer(self):
+        """ Stops the timer.
+        """
+        self.timer.stop()

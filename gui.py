@@ -17,7 +17,7 @@ class StudyWidget:
         self.root = tk.Tk()
         self.root.title("Study Widget")
         
-        self.timer = Timer(25, 5)
+        self.timer = Timer()
         
         self.root.geometry("300x250")
         

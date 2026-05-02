@@ -13,7 +13,7 @@ class Timer:
             10: 3
         }
 
-        self.work_time = 25 * 60  # default to 25 min
+        self.work_time = 25 * 60  
         self.break_time = 5 * 60
 
         self.current_time = self.work_time

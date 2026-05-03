@@ -70,4 +70,4 @@ class Timer:
     def stop_timer(self):
         """ Stops the timer.
         """
-        self.timer.stop()
+        self.stop()

@@ -34,6 +34,7 @@ class Timer:
 
         self.current_time = self.work_time
         self.is_break = False
+        self.is_running = False
 
     def start(self):
         self.is_running = True

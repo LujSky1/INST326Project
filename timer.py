@@ -67,7 +67,3 @@ class Timer:
     def get_mode(self):
         return "Break" if self.is_break else "Work"
     
-    def stop_timer(self):
-        """ Stops the timer.
-        """
-        self.timer.stop()

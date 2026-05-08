@@ -40,5 +40,51 @@ class RockPaperScissors(Game):
 
 
 class FlappyBird(Game):
+
+    """ 
+    base class for all mini-games. subclasses must implement start().
+    """
+    
     def start(self):
-        print("Flappy Bird launched (not implemented yet)")
+        """ 
+        Starts the game. must be overridden by subclasses.
+        """
+        raise NotImplementedError ("subclasses must implement start()")
+
+class FlappyBird(Game):
+        """
+        A Flappy Bird game where the bird must pass through pipes without hitting them or the ground.
+
+        Attributes:
+          bird_y (float): vertical position of the bird.
+          velocity (float): current vertical speed of the bird
+          score (int): number of pipes passed
+          is_alive (bool): false if bird has collided
+          pipes (list): list of active pipe obstacles
+          """
+    
+        GRAVITY = 1.5
+        FLAP_STRENGTH = -10
+        PIPE_WIDTH = 60
+        GAP_SIZE = 150
+        SCREEN_HEIGHT = 600
+        SCREEN_WIDTH = 400
+        BIRD_X = 80
+        BIRD_SIZE = 20
+
+    def__init__(self):
+    """ 
+    initializes the bird position, velocity, score, and first pipe.
+    """
+      self.bird_y = self.SCREEN_HEIGHT // 2
+      self.velocity = 0
+      self.score = 0
+      self.is_alive = True
+      self.pipes = []
+      self.generate_pipe()
+
+   def start(self):
+       """
+       starts with Flappy Bird game loop.
+       """
+       print("Starting Flappy Bird game...")

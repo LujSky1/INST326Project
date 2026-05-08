@@ -251,16 +251,18 @@ class FlappyBird(Game):
 
     def move_pipes(self):
         """
-        Moves pipes left across screen.
+        Moves pipes left across screen and creates new ones with spacing.
         """
+
+        # Move all pipes
         for pipe_pair in self.pipes:
             for pipe in pipe_pair:
                 self.canvas.move(pipe, -5, 0)
 
-        # Remove off-screen pipes
+        # Remove pipes off screen
         if self.pipes:
-            first_pipe = self.pipes[0][0]
-            coords = self.canvas.coords(first_pipe)
+            first_top_pipe = self.pipes[0][0]
+            coords = self.canvas.coords(first_top_pipe)
 
             if coords[2] < 0:
                 for pipe in self.pipes[0]:
@@ -275,8 +277,16 @@ class FlappyBird(Game):
                     text=f"Score: {self.score}"
                 )
 
-        # Add new pipes
-        if len(self.pipes) < 3:
+        # Create new pipe ONLY when last pipe reaches a position
+        if self.pipes:
+            last_pipe = self.pipes[-1][0]
+            coords = self.canvas.coords(last_pipe)
+
+            # Pipe spacing
+            if coords[0] < 220:
+                self.create_pipe()
+        else:
+            # First pipe
             self.create_pipe()
 
     def check_collision(self):

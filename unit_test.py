@@ -117,15 +117,22 @@ if __name__ == "__main__":
 class TestTimer(unittest.TestCase):
 
     def setUp(self):
-        self.timer = Timer(1, 1)  # small values for testing
+        self.timer = Timer()  # small values for testing
 
     def test_initial_state(self):
+        self.assertEqual(self.timer.work_minutes, 25)
+        self.assertEqual(self.timer.current_time, 1500)
         self.assertFalse(self.timer.is_break)
         self.assertFalse(self.timer.is_running)
 
     def test_start(self):
         self.timer.start()
         self.assertTrue(self.timer.is_running)
+
+    def test_stop(self):
+        self.timer.start()
+        self.timer.stop()
+        self.assertFalse(self.timer.is_running)
 
     def test_tick(self):
         self.timer.start()
@@ -138,11 +145,21 @@ class TestTimer(unittest.TestCase):
         self.timer.start()
         self.timer.tick()
         self.assertTrue(self.timer.is_break)
+        self.assertEqual(self.timer.get_mode(), "Break")
 
     def test_format_time(self):
         self.timer.current_time = 65
         self.assertEqual(self.timer.get_time(), "01:05")
 
+    def test_set_work_time(self):
+        self.timer.set_work_time(15)
+        self.assertEqual(self.timer.work_minutes, 15)
+        self.assertEqual(self.timer.current_time, 900)
+        self.assertEqual(self.timer.break_time, 300)
+
+    def test_invalid_work_time(self):
+        with self.assertRaises(ValueError):
+            self.timer.set_work_time(20)
 
 if __name__ == "__main__":
     unittest.main()

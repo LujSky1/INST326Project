@@ -172,21 +172,25 @@ class RockPaperScissors(Game):
 # ==================================================
 class FlappyBird(Game):
     """
-    Simplified Flappy Bird animation.
+    Simple Flappy Bird game with moving pipes.
     """
 
     def __init__(self):
         self.window = tk.Toplevel()
         self.window.title("Flappy Bird")
 
+        self.width = 400
+        self.height = 500
+
         self.canvas = tk.Canvas(
             self.window,
-            width=400,
-            height=500,
+            width=self.width,
+            height=self.height,
             bg="skyblue"
         )
         self.canvas.pack()
 
+        # Bird
         self.bird = self.canvas.create_oval(
             50, 200, 80, 230,
             fill="yellow"
@@ -194,28 +198,134 @@ class FlappyBird(Game):
 
         self.velocity = 0
 
+        # Pipe settings
+        self.pipe_width = 60
+        self.pipe_gap = 150
+
+        self.pipes = []
+
+        self.score = 0
+
+        self.score_text = self.canvas.create_text(
+            50,
+            30,
+            text="Score: 0",
+            font=("Arial", 16, "bold")
+        )
+
+        self.create_pipe()
+
         self.window.bind("<space>", self.flap)
 
         self.update_game()
 
     def flap(self, event):
         """
-        Makes bird jump.
+        Makes bird jump upward.
         """
         self.velocity = -8
 
+    def create_pipe(self):
+        """
+        Creates a new random pipe pair.
+        """
+        gap_y = random.randint(100, 300)
+
+        top_pipe = self.canvas.create_rectangle(
+            self.width,
+            0,
+            self.width + self.pipe_width,
+            gap_y,
+            fill="green"
+        )
+
+        bottom_pipe = self.canvas.create_rectangle(
+            self.width,
+            gap_y + self.pipe_gap,
+            self.width + self.pipe_width,
+            self.height,
+            fill="green"
+        )
+
+        self.pipes.append((top_pipe, bottom_pipe))
+
+    def move_pipes(self):
+        """
+        Moves pipes left across screen.
+        """
+        for pipe_pair in self.pipes:
+            for pipe in pipe_pair:
+                self.canvas.move(pipe, -5, 0)
+
+        # Remove off-screen pipes
+        if self.pipes:
+            first_pipe = self.pipes[0][0]
+            coords = self.canvas.coords(first_pipe)
+
+            if coords[2] < 0:
+                for pipe in self.pipes[0]:
+                    self.canvas.delete(pipe)
+
+                self.pipes.pop(0)
+
+                self.score += 1
+
+                self.canvas.itemconfig(
+                    self.score_text,
+                    text=f"Score: {self.score}"
+                )
+
+        # Add new pipes
+        if len(self.pipes) < 3:
+            self.create_pipe()
+
+    def check_collision(self):
+        """
+        Checks if bird hits pipe or ground.
+        """
+        bird_coords = self.canvas.coords(self.bird)
+
+        # Ground collision
+        if bird_coords[3] >= self.height:
+            return True
+
+        # Ceiling collision
+        if bird_coords[1] <= 0:
+            return True
+
+        # Pipe collision
+        for pipe_pair in self.pipes:
+            for pipe in pipe_pair:
+                pipe_coords = self.canvas.coords(pipe)
+
+                overlap = not (
+                    bird_coords[2] < pipe_coords[0] or
+                    bird_coords[0] > pipe_coords[2] or
+                    bird_coords[3] < pipe_coords[1] or
+                    bird_coords[1] > pipe_coords[3]
+                )
+
+                if overlap:
+                    return True
+
+        return False
+
     def update_game(self):
         """
-        Updates bird movement.
+        Main game loop.
         """
         self.velocity += 0.5
 
         self.canvas.move(self.bird, 0, self.velocity)
 
-        pos = self.canvas.coords(self.bird)
+        self.move_pipes()
 
-        if pos[3] >= 500:
-            messagebox.showinfo("Game Over", "Bird crashed!")
+        if self.check_collision():
+            messagebox.showinfo(
+                "Game Over",
+                f"Final Score: {self.score}"
+            )
+
             self.window.destroy()
             return
 

@@ -347,6 +347,46 @@ class FlappyBird(Game):
         """
         self.window.mainloop()
 
+class MemoryGame(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.colors = ['red', 'red', 'blue', 'blue', 'green', 'green', 'yellow', 'yellow']
+        random.shuffle(self.colors)
+        self.buttons = []
+        self.first_guess = None
+        self.create_widgets()
+
+    def create_widgets(self):
+        for i in range(8):
+            btn = tk.Button(self, text=" ", width=10, height=5, 
+                            command=lambda i=i: self.on_click(i))
+            btn.grid(row=i//4, column=i%4)
+            self.buttons.append(btn)
+
+    def on_click(self, index):
+        self.buttons[index].config(highlightbackground=self.colors[index])
+        
+        if self.first_guess is None:
+            self.first_guess = index
+        else:
+            if self.colors[self.first_guess] == self.colors[index]:
+                # It's a match! Disable both
+                self.buttons[self.first_guess].config(state="disabled")
+                self.buttons[index].config(state="disabled")
+            else:
+                # No match, hide after 500ms
+                self.after(500, lambda: self.reset_buttons(self.first_guess, index))
+            self.first_guess = None
+
+    def reset_buttons(self, idx1, idx2):
+        self.buttons[idx1].config(bg="SystemButtonFace")
+        self.buttons[idx2].config(bg="SystemButtonFace")
+
+# To run as a standalone window
+root = tk.Tk()
+game = MemoryGame(root)
+game.pack()
+root.mainloop()
 
 if __name__ == "__main__":
     game = FlappyBird()

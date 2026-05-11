@@ -166,22 +166,39 @@ class RockPaperScissors(Game):
     def start(self):
         self.window.mainloop()
 
-
+"""
+Flappy Bird mini-game in the app.
+"""
 # ==================================================
 # FLAPPY BIRD (SIMPLE VERSION)
 # ==================================================
+
+import tkinter as tk
+import random
+from tkinter import messagebox
+
+class Game:
+    """
+    base class for all mini-games
+    """
+    def start(self):
+        """
+        starts the game, must be overridden by subclasses
+        """
+        raise NotImplementedError("Subclasses must implement start()")
+        
 class FlappyBird(Game):
     """
-    Simple Flappy Bird game with moving pipes.
+    Simplified Flappy Bird game using tkinter
     """
-
     def __init__(self):
+        """
+        This sets up the game window, pipes, bird, and score
+        """
         self.window = tk.Toplevel()
         self.window.title("Flappy Bird")
-
         self.width = 400
         self.height = 500
-
         self.canvas = tk.Canvas(
             self.window,
             width=self.width,
@@ -190,144 +207,128 @@ class FlappyBird(Game):
         )
         self.canvas.pack()
 
-        # Bird
+        #bird code
         self.bird = self.canvas.create_oval(
             50, 200, 80, 230,
             fill="yellow"
         )
-
         self.velocity = 0
 
-        # Pipe settings
+        # the settings for the pipe
         self.pipe_width = 60
         self.pipe_gap = 150
-
         self.pipes = []
 
+        #the score code
         self.score = 0
-
         self.score_text = self.canvas.create_text(
-            50,
-            30,
+            50, 30,
             text="Score: 0",
-            font=("Arial", 16, "bold")
-        )
-
-        self.create_pipe()
-
+            font=("Lower Pixel", 17, "bold")
+        ) 
+       
         self.window.bind("<space>", self.flap)
-
+        self.create_pipe()
         self.update_game()
 
+#flap method
     def flap(self, event):
         """
-        Makes bird jump upward.
+        This makes the bird jump up when the spacebar is pressed/clicked
         """
         self.velocity = -8
 
+# create pipe method
     def create_pipe(self):
         """
-        Creates a new random pipe pair.
+        This creates a new random pipe pair
         """
         gap_y = random.randint(100, 300)
 
         top_pipe = self.canvas.create_rectangle(
-            self.width,
-            0,
-            self.width + self.pipe_width,
-            gap_y,
+            self.width, 0,
+            self.width + self.pipe_width, gap_y,
             fill="green"
         )
 
         bottom_pipe = self.canvas.create_rectangle(
-            self.width,
-            gap_y + self.pipe_gap,
-            self.width + self.pipe_width,
-            self.height,
+            self.width, gap_y + self.pipe_gap,
+            self.width + self.pipe_width, self.height,
             fill="green"
         )
 
         self.pipes.append((top_pipe, bottom_pipe))
 
+     #move pipes method
     def move_pipes(self):
         """
-        Moves pipes left across screen and creates new ones with spacing.
+        This moves pipes left across the screen and creates new ones
         """
-
-        # Move all pipes
+        ## moving all the pipes
         for pipe_pair in self.pipes:
             for pipe in pipe_pair:
                 self.canvas.move(pipe, -5, 0)
 
-        # Remove pipes off screen
+        ##this removes the pipes that go off the screen
         if self.pipes:
-            first_top_pipe = self.pipes[0][0]
-            coords = self.canvas.coords(first_top_pipe)
+            first_pipe = self.pipes[0][0]
+            coords = self.canvas.coords(first_pipe)
 
             if coords[2] < 0:
                 for pipe in self.pipes[0]:
                     self.canvas.delete(pipe)
-
                 self.pipes.pop(0)
-
                 self.score += 1
-
                 self.canvas.itemconfig(
                     self.score_text,
                     text=f"Score: {self.score}"
                 )
 
-        # Create new pipe ONLY when last pipe reaches a position
+        ##this creates new pipe when the last pipe reaches the middle of the screen
         if self.pipes:
             last_pipe = self.pipes[-1][0]
             coords = self.canvas.coords(last_pipe)
-
-            # Pipe spacing
             if coords[0] < 220:
                 self.create_pipe()
         else:
-            # First pipe
             self.create_pipe()
 
+#check collision method
     def check_collision(self):
         """
-        Checks if bird hits pipe or ground.
+        This checks if the bird hits a pipe or the ground
         """
         bird_coords = self.canvas.coords(self.bird)
 
-        # Ground collision
+        ##checks for ground collision
         if bird_coords[3] >= self.height:
             return True
 
-        # Ceiling collision
-        if bird_coords[1] <= 0:
+        ##checks for ceiling collision
+        if bird_coords [1] <= 0:
             return True
 
-        # Pipe collision
+        ##checks for pipe collision
         for pipe_pair in self.pipes:
             for pipe in pipe_pair:
                 pipe_coords = self.canvas.coords(pipe)
-
                 overlap = not (
                     bird_coords[2] < pipe_coords[0] or
                     bird_coords[0] > pipe_coords[2] or
                     bird_coords[3] < pipe_coords[1] or
                     bird_coords[1] > pipe_coords[3]
                 )
-
                 if overlap:
                     return True
-
         return False
 
+#update game method
     def update_game(self):
         """
-        Main game loop.
+        This is the main game loop that runs every 30 milliseconds
         """
         self.velocity += 0.5
-
         self.canvas.move(self.bird, 0, self.velocity)
-
         self.move_pipes()
 
         if self.check_collision():
@@ -335,11 +336,18 @@ class FlappyBird(Game):
                 "Game Over",
                 f"Final Score: {self.score}"
             )
-
             self.window.destroy()
             return
+        self.window.after(30,self.update_game)
 
-        self.window.after(30, self.update_game)
-
+#start method
     def start(self):
+        """
+        This launches the tkinter game window
+        """
         self.window.mainloop()
+
+
+if __name__ == "__main__":
+    game = FlappyBird()
+    game.start()

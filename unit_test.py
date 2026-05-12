@@ -1,6 +1,8 @@
 import unittest
+import tkinter as tk
 from games import RockPaperScissors, TicTacToe, FlappyBird
 from timer import Timer
+
 
 
 class TestRockPaperScissors(unittest.TestCase):
@@ -74,45 +76,51 @@ class TestFlappyBird(unittest.TestCase):
 
     def setUp(self):
         """
-        Creates a new FlappyBird instance before each test.
+        Creates a hidden tkinter window and new FlappyBird instance before each test.
         """
+        self.root = tk.Tk()
+        self.root.withdraw()
         self.game = FlappyBird()
 
-    def test_initial_state(self):
+    def tearDown(self):
         """
-        Tests initial values of the game.
+        destroys the window after each test.
+        """
+        self.game.window.destroy()
+        self.root.destroy()
+
+    def test_score_starts_at_zero(self):
+        """
+        score should be 0 at the start.
         """
         self.assertEqual(self.game.score, 0)
-        self.assertTrue(self.game.is_alive)
-        self.assertEqual(self.game.position, 0)
 
-    def test_flap(self):
+    def test_velocity_starts_at_zero(self):
         """
-        Tests that flap increases position.
+        velocity should be at 0 at the start.
         """
-        self.game.flap()
-        self.assertEqual(self.game.position, 2)
+        self.assertEqual(self.game.velocity, 0)
 
-    def test_gravity(self):
+    def test_pipes_not_empty(self):
         """
-        Tests that gravity decreases position.
+        at least one pipe should exist at the start of the game
         """
-        self.game.position = 5
-        self.game.gravity()
-        self.assertEqual(self.game.position, 4)
+        self.assertGreaterEqual(len(self.game.pipes), 1)
 
-    def test_game_over(self):
+    def test_flap_sets_negative_velocity(self):
         """
-        Tests that the game ends when position goes below zero.
+        flap should set velocity to -8
         """
-        self.game.position = 0
-        self.game.gravity()
-        self.assertFalse(self.game.is_alive)
+        self.game.flap(None)
+        self.assertEqual(self.game.velocity, -8)
 
-
-if __name__ == "__main__":
-    unittest.main()
-    unittest.main()
+    def test_no_collision_at_start(self):
+        """
+        the bird should not collide at the starting position
+        """
+        self.game.pipes = []
+        self.assertFalse(self.game.check_collision())
+        
 
 class TestTimer(unittest.TestCase):
 
